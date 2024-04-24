@@ -33,7 +33,11 @@ public class ArticleService {
     }
 
     public ArticleDto findById(Long id) {
-        return ArticleDto.fromEntity(articleRepository.findById(id).orElse(null));
+        Article article = articleRepository.findById(id).orElse(null);
+        if (article == null){
+            return null;
+        }
+        return ArticleDto.fromEntity(article);
     }
 
     public void update(ArticleDto dto) {

@@ -4,10 +4,11 @@ package com.example.MyBoard.dto;
 import com.example.MyBoard.entity.Article;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class ArticleDto {
     private Long id;
     @Size(max = 20,min = 1, message = "제목을 입력해주세요")

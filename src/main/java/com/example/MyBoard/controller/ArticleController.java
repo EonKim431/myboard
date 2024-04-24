@@ -1,6 +1,7 @@
 package com.example.MyBoard.controller;
 
 import com.example.MyBoard.dto.ArticleDto;
+import com.example.MyBoard.entity.Article;
 import com.example.MyBoard.repositary.service.ArticleService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -8,12 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/articles")
-@Transactional
 public class ArticleController {
     private final ArticleService articleService;
 
@@ -52,8 +53,18 @@ public class ArticleController {
         return "/articles/update";
     }
     @GetMapping("/delete")
-    public String deleteform(@RequestParam("id")Long id){
-        articleService.deleteById(id);
+    public String deleteform(@RequestParam("id")Long id,
+                             RedirectAttributes redirectAttributes){
+        //1. 삭제할 대상이 존재하는지 확인
+        ArticleDto article = articleService.findById(id);
+        //2. 대상 엔티티가 존재하면 삭제 처리 후 매시지를 전송
+        if (article != null){
+            articleService.deleteById(id);
+            redirectAttributes.addFlashAttribute("msg","정상적으로 삭제되었습니다");
+        }
+        else {
+            redirectAttributes.addFlashAttribute("msg","삭제에 실패했습니다");
+        }
         return "redirect:/";
     }
     @GetMapping("/")
